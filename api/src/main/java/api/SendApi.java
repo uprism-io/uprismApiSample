@@ -15,8 +15,8 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 
 public class SendApi {
-	private static final String CLIENT_KEY = "CAB0527D-14BD-4FFF-A25B-ACF2E141355C";
-	private static final String CLIENT_SECRET = "89368D83-EE39-48BA-9C04-3AF9B47C3F78";
+	private static final String CLIENT_KEY = "****";
+	private static final String CLIENT_SECRET = "####";
 	
 	public String getAccessToken(String apiAddress) {
 		String accessToken = "";
