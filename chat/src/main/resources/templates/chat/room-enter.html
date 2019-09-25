@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <script src="/webjars/jquery/dist/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.1.0/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.1.0/dist/css/bootstrap.min.css">
+</head>
+<style>
+html, body {
+	height: 100%;
+	overflow: hidden;
+}
+
+div {
+	position: relative;
+	top: calc(50% - 143px);
+	width: 60%;
+	text-align: center;
+	margin: auto;
+	padding: 50px;
+}
+
+input {
+	width: 70% !important;
+	display: inline !important;
+	vertical-align: middle;
+}
+</style>
+<body>
+<div class="border border-secondary rounded">
+<p class="h1 mb-5">채팅에서 사용할 이름을 입력하세요.</p>
+<input type="text" id="memberName" class="form-control" placeholder="영문 또는 숫자, 미입력시 member + 숫자"/>
+<button class="btn btn-secondary" onclick="enterChat('{{id}}');">입장</button>
+</div>
+<script>
+
+function enterChat (id) {
+	var memberName = $('#memberName').val();
+	var url = '/chat/rooms/' + id;
+	
+	if (memberName != '')
+		url += "/" + memberName;
+	
+	location.href = url;
+}
+
+</script>
+</body>
+</html>

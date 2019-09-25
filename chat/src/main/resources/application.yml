@@ -1,0 +1,36 @@
+spring.profiles.active: local
+
+spring.http.encoding: 
+  charset: UTF-8
+  enabled: true
+  force: true
+
+spring:
+  mustache:
+    suffix: .html
+viewname:
+  chatroom:
+    enter: /chat/room-enter
+    detail: /chat/room-detail
+
+---
+server.port: 20443
+
+spring:
+   profiles: local
+    
+api.address: https://uprism.io:30443/
+---
+server.port: 20443
+
+spring:
+   profiles: development
+    
+api.address: https://uprism.io:30443/
+---
+server.port: 20443
+
+spring:
+   profiles: production
+    
+api.address: https://uprism.io:30443/

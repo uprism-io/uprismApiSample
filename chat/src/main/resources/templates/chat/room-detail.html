@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{room.name}}</title>
+    <script src="/webjars/jquery/dist/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.1.0/dist/js/bootstrap.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.1.0/dist/css/bootstrap.min.css">
+</head>
+<style>
+button {
+	cursor: pointer;
+	font-size: 15px;
+}
+
+.exit {
+	position: absolute;
+	left: 40px;
+	font-size: 20px;
+	background-color: transparent;
+}
+
+.content {
+	width: 70%;
+	min-width: 600px;
+	height: 700px;
+	text-align: center;
+	margin: auto;
+}
+
+.chat_box {
+	height: 90%;
+	overflow-y: scroll;
+}
+
+.chat_box li {
+	font-size: 20px;
+	list-style: none;
+	padding: 5px 0;
+}
+
+.writer {
+	width: 100px;
+}
+
+.message {
+	width: calc(100% - 400px) !important;
+	display: inline !important;
+	vertical-align: middle;
+}
+
+.send {
+	width: 120px;
+}
+
+.conf {
+	width: 170px;
+}
+</style>
+<body>
+<div class="alert alert-danger fade" role="alert" style="z-index: 10000;">
+	회의 제목을 입력해주세요.
+	<button type="button" class="close">
+		<span aria-hidden="true">&times;</span>
+	</button>
+</div>
+<button class="exit btn"><img src="/image/ico_back.png" class="align-baseline mr-3"/>나가기</button><p class="h1 text-center">{{room.name}}</p>
+<div class="content" data-room-id="{{room.id}}" data-member="{{member}}">
+    <ul class="chat_box border border-secondary text-left m-5 pt-2">
+    </ul>
+    <input class="message form-control" name="message">
+    <button class="send btn btn-secondary">보내기</button>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#confModal">화상회의 방 만들기</button>
+</div>
+<div class="modal fade" id="confModal" tabindex="-1" role="dialog" aria-labelledby="confModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="confModalLabel">화상회의</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label for="confTitle" class="col-form-label">회의 제목:</label>
+					<input type="text" class="form-control" id="confTitle" required>
+				</div>
+			<div class="form-group">
+				<label for="confAgenda" class="col-form-label">안건:</label>
+				<textarea class="form-control" id="confAgenda"></textarea>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			<button type="button" class="conf btn btn-primary">Send message</button>
+		</div>
+	</div>
+</div>
+</div>
+<script>
+    $(function () {
+    	var confUserId = '';
+        var chatBox = $('.chat_box');
+        var messageInput = $('input[name="message"]');
+        var sendBtn = $('.send');
+        var confBtn = $('.conf');
+        var exitBtn = $('.exit');
+        var roomId = $('.content').data('room-id');
+        var member = $('.content').data('member');
+
+        var sock = new SockJS("/stomp-chat");
+        var client = Stomp.over(sock);
+        client.debug = function (e) {
+        };
+		
+        client.connect({}, function () {
+            client.send('/publish/chat/join', {}, JSON.stringify({chatRoomId: roomId, type: 'JOIN', writer: member}));
+            client.send('/publish/user/join', {}, JSON.stringify({chatRoomId: roomId, type: 'USER', writer: member}));
+			
+            client.subscribe('/subscribe/user/join/' + roomId + '/user/' + member, function (response) {
+            	var user = JSON.parse(JSON.parse(response.body).message);
+            	confUserId = user.response.user_id;
+            });
+            
+            client.subscribe('/subscribe/chat/room/' + roomId, function (chat) {
+                var content = JSON.parse(chat.body);
+                chatBox.append('<li><span class="writer text-success mr-4">' + content.writer + "</span>" + content.message + '</li>')
+            });
+            
+            client.subscribe('/subscribe/conf/join/' + roomId + '/user/' + member, function (conf) {
+            	window.open(JSON.parse(conf.body).message);
+            });
+            
+            client.subscribe('/subscribe/conf/room/' + roomId, function (conf) {
+            	var conf = JSON.parse(conf.body);
+            	var message = JSON.parse(conf.message);
+            	var joinConfObj = $('<li><button id="'+ message.room_id +'" class="join_conf btn">멤버로 회의입장</button></li>');
+            	chatBox.append('<li><a target="_blank" href="'+ message.join_url +'">' + message.title + '</a></li>');
+            	chatBox.append(joinConfObj);
+            	chatBox.append('<li>uPrism.io Meetings 화상회의에 초대합니다.</li>');
+            	chatBox.append('<li>· URL : ' + message.join_url +'</li>');
+            	chatBox.append('<li>· 회의ID : ' + getConfId(message.join_url) +'</li>');
+            	chatBox.append('<li>' + message.agenda +'</li>');
+            	joinConfObj.find('.join_conf').click(function () {
+            		client.send('/publish/conference/join', {}, JSON.stringify({chatRoomId: roomId, type: 'CONF', message: this.id, writer: confUserId})); 	
+            	});
+            })
+        });
+
+        messageInput.keypress(function (e) {
+        	if (e.keyCode == 13) {
+        		sendMessage();
+        	}
+        })
+        
+        sendBtn.click(function () {
+            sendMessage();
+        });
+        
+		confBtn.click(function () {
+			var confTitle = $('#confTitle').val();
+			var confAgenda = $('#confAgenda').val();
+			
+			if (confTitle != '') {
+				var message = confUserId;
+				
+				client.send('/publish/conference/' + confTitle + "/" + confAgenda, {}, JSON.stringify({chatRoomId: roomId, type: 'CONF', message: message, writer: member}));
+				messageInput.val('');
+				$('#confModal').modal('hide');
+			} else {
+				$('.alert').removeClass('fade');
+			}
+		});
+		
+		$('.close').click(function () {
+			$('.alert').addClass('fade');
+		});
+		
+		exitBtn.click(function () {
+			client.disconnect();
+			location.href='/chat/roomsEnter';
+		});
+		
+		function sendMessage() {
+			var message = messageInput.val();
+			if (message != '') {
+	            client.send('/publish/chat/message', {}, JSON.stringify({chatRoomId: roomId, type: 'CHAT', message: message, writer: member}));
+	            messageInput.val('');
+			}
+		}
+		
+		function getConfId(joinUrl) {
+			var confId = joinUrl.split('/')[4];
+			console.log(confId.replace(/\B(?=(\d{3})+(?!\d))/g, "."));
+			return confId.replace(/\B(?=(\d{3})+(?!\d))/g, "-");
+		}
+    });
+</script>
+</body>
+</html>
