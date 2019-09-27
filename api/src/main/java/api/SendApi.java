@@ -13,10 +13,19 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SendApi {
-	private static final String CLIENT_KEY = "****";
-	private static final String CLIENT_SECRET = "####";
+	
+	@Value("${api.address}")
+	private String apiAddress;
+	
+	@Value("${api.clientKey}")
+	private String clientKey;
+	
+	@Value("${api.clientSecret}")
+	private String clientSecret;
 	
 	public String getAccessToken(String apiAddress) {
 		String accessToken = "";
@@ -38,7 +47,7 @@ public class SendApi {
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
 			con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
 			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-			con.setRequestProperty("Authorization", "Basic " + encoder.encodeToString((CLIENT_KEY + ":" + CLIENT_SECRET).getBytes("UTF-8")));
+			con.setRequestProperty("Authorization", "Basic " + encoder.encodeToString((clientKey + ":" + clientSecret).getBytes("UTF-8")));
 			con.setDoOutput(true); 
 			con.setDoInput(true); 
 			con.setRequestMethod("POST");
@@ -61,12 +70,12 @@ public class SendApi {
 		return accessToken;
 	}
 	
-	public JSONObject getRequest(String url, String parameter, @Value("${api.address}") String apiAddress) {
+	public JSONObject getRequest(String url, String parameter) {
 		
 		return new JSONObject();
 	}
 	
-	public JSONObject makeConf(String userId, String confTitle, String confAgenda, String apiAddress) {
+	public JSONObject makeConf(String userId, String confTitle, String confAgenda) {
 		JSONObject conf = null;
 		Map<String, Object> params = new HashMap<>();
 		params.put("title", confTitle);
@@ -109,7 +118,7 @@ public class SendApi {
 		return conf;
 	}
 	
-	public JSONObject getConf(String apiAddress) {
+	public JSONObject getConf() {
 		JSONObject conf = null;
 		
 		try {
@@ -143,7 +152,7 @@ public class SendApi {
 		return conf;
 	}
 	
-	public JSONObject makeUser(Map<String, Object> params, String apiAddress) {
+	public JSONObject makeUser(Map<String, Object> params) {
 		JSONObject user = null;
 		
 		try {
@@ -183,7 +192,7 @@ public class SendApi {
 		return user;
 	}
 
-	public JSONObject joinConf(String userId, String roomId, String apiAddress) {
+	public JSONObject joinConf(String userId, String roomId) {
 		JSONObject conf = null;
 		
 		try {

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -19,9 +18,8 @@ public class ChatMessageController {
 
     private final SimpMessagingTemplate template;
     
-	@Value("${api.address}")
-	private String apiAddress;
-
+    @Autowired SendApi sendApi;
+    
     @Autowired
     public ChatMessageController(SimpMessagingTemplate template) {
         this.template = template;
@@ -39,7 +37,7 @@ public class ChatMessageController {
     	params.put("user_id", message.getWriter());
     	params.put("user_name", message.getWriter());
     	params.put("email", "test");
-    	JSONObject user = new SendApi().makeUser(params, apiAddress);
+    	JSONObject user = sendApi.makeUser(params);
         message.setMessage(user.toString());
         template.convertAndSend("/subscribe/user/join/" + message.getChatRoomId() + "/user/" + message.getWriter(), message);
     }
@@ -51,21 +49,21 @@ public class ChatMessageController {
     
     @MessageMapping("/conference/{confTitle}/")
     public void conference(ChatMessage message, @DestinationVariable String confTitle) {
-    	JSONObject conf = new SendApi().makeConf(message.getMessage(), confTitle, "", apiAddress);
+    	JSONObject conf = sendApi.makeConf(message.getMessage(), confTitle, "");
     	message.setMessage((conf.get("response").toString()));
     	template.convertAndSend("/subscribe/conf/room/" + message.getChatRoomId(), message);
     }
     
     @MessageMapping("/conference/{confTitle}/{confAgenda}")
     public void conference(ChatMessage message, @DestinationVariable String confTitle, @DestinationVariable String confAgenda) {
-    	JSONObject conf = new SendApi().makeConf(message.getMessage(), confTitle, confAgenda, apiAddress);
+    	JSONObject conf = sendApi.makeConf(message.getMessage(), confTitle, confAgenda);
     	message.setMessage((conf.get("response").toString()));
     	template.convertAndSend("/subscribe/conf/room/" + message.getChatRoomId(), message);
     }
 
     @MessageMapping("/conference/join")
     public void joinConference(ChatMessage message) {
-    	JSONObject conf = new SendApi().joinConf(message.getWriter(), message.getMessage(), apiAddress);
+    	JSONObject conf = sendApi.joinConf(message.getWriter(), message.getMessage());
     	message.setMessage(conf.get("response").toString());
     	template.convertAndSend("/subscribe/conf/join/" + message.getChatRoomId() + "/user/" 
     	+ message.getWriter().substring(message.getWriter().indexOf(".") + 1, message.getWriter().length() - 4)

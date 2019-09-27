@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "chat,api")
 public class UprismApiSampleApplication {
 
 	public static void main(String[] args) {
@@ -14,6 +14,7 @@ public class UprismApiSampleApplication {
 
 	@Controller
 	public static class MainController {
+		
 		@GetMapping("/")
 		public String main() {
 			return "redirect:/chat/roomsEnter";
