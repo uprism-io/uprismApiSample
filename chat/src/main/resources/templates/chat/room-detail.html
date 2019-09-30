@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>{{room.name}}</title>
-    <script src="/webjars/jquery/dist/jquery.min.js"></script>
-    <script src="/webjars/bootstrap/4.1.0/dist/js/bootstrap.min.js"></script>
-    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
-    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
-    <link rel="stylesheet" href="/webjars/bootstrap/4.1.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{context.contextPath}}/webjars/bootstrap/4.1.0/dist/css/bootstrap.min.css">
+    <script src="{{context.contextPath}}/webjars/jquery/dist/jquery.min.js"></script>
+    <script src="{{context.contextPath}}/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="{{context.contextPath}}/webjars/bootstrap/4.1.0/dist/js/bootstrap.min.js"></script>
+    <script src="{{context.contextPath}}/webjars/stomp-websocket/stomp.min.js"></script>
 </head>
 <style>
 button {
@@ -66,7 +66,7 @@ button {
 		<span aria-hidden="true">&times;</span>
 	</button>
 </div>
-<button class="exit btn"><img src="/image/ico_back.png" class="align-baseline mr-3"/>나가기</button><p class="h1 text-center">{{room.name}}</p>
+<button class="exit btn"><img src="{{context.contextPath}}/image/ico_back.png" class="align-baseline mr-3"/>나가기</button><p class="h1 text-center">{{room.name}}</p>
 <div class="content" data-room-id="{{room.id}}" data-member="{{member}}">
     <ul class="chat_box border border-secondary text-left m-5 pt-2">
     </ul>
@@ -88,17 +88,17 @@ button {
 					<label for="confTitle" class="col-form-label">회의 제목:</label>
 					<input type="text" class="form-control" id="confTitle" required>
 				</div>
-			<div class="form-group">
-				<label for="confAgenda" class="col-form-label">안건:</label>
-				<textarea class="form-control" id="confAgenda"></textarea>
+				<div class="form-group">
+					<label for="confAgenda" class="col-form-label">안건:</label>
+					<textarea class="form-control" id="confAgenda"></textarea>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="conf btn btn-primary">Send message</button>
 			</div>
 		</div>
-		<div class="modal-footer">
-			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			<button type="button" class="conf btn btn-primary">Send message</button>
-		</div>
 	</div>
-</div>
 </div>
 <script>
     $(function () {
@@ -111,7 +111,7 @@ button {
         var roomId = $('.content').data('room-id');
         var member = $('.content').data('member');
 
-        var sock = new SockJS("/stomp-chat");
+        var sock = new SockJS("{{context.contextPath}}/stomp-chat");
         var client = Stomp.over(sock);
         client.debug = function (e) {
         };
@@ -181,7 +181,7 @@ button {
 		
 		exitBtn.click(function () {
 			client.disconnect();
-			location.href='/chat/roomsEnter';
+			location.href='{{context.contextPath}}/roomsEnter';
 		});
 		
 		function sendMessage() {

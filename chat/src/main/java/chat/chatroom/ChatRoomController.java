@@ -14,7 +14,7 @@ import chat.chatroom.model.ChatRoom;
 import chat.chatroom.repository.ChatRoomRepository;
 
 @Controller
-@RequestMapping("/chat")
+@RequestMapping("/")
 public class ChatRoomController {
 
     private final ChatRoomRepository repository;

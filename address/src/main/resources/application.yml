@@ -1,9 +1,8 @@
-spring.profiles.include: 
+spring.profiles.include:
    - api
 
 server:
-   port: 8080
-   context-path: chat
+   port: 8081
 
 spring.http.encoding: 
   charset: UTF-8
@@ -14,7 +13,3 @@ spring:
   mustache:
     suffix: .html
     request-context-attribute: context
-viewname:
-  chatroom:
-    enter: /chat/room-enter
-    detail: /chat/room-detail

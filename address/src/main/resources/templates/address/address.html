@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <script src="{{context.contextPath}}/webjars/jquery/dist/jquery.min.js"></script>
+    <script src="{{context.contextPath}}/webjars/bootstrap/4.1.0/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{{context.contextPath}}/webjars/bootstrap/4.1.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{context.contextPath}}/css/address.css">
+</head>
+<body>
+<h1>전체 주소록 리스트</h1>
+<button class="btn btn-primary" data-toggle="modal" data-target="#addressModal">주소록 추가</button>
+<ul>
+{{#result.response}}
+	<li>
+		<div>
+			<p>userName: {{address_user_name}}</p>
+			<p>email: {{email}}</p>
+			<p>group: {{group_name}}</p>
+			<form action="delete" method="post">
+				<input type="hidden" value="{{idx}}" name="addressIdx">
+				<button class="btn btn-primary">이 주소록 삭제</button>
+			</form>
+		</div>
+	</li>
+{{/result.response}}
+</ul>
+<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="confModalLabel">주소록</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<label for="addressName" class="col-form-label"><span class="require-field">*</span>이름:</label>
+					<input type="text" class="form-control" id="addressName" required>
+				</div>
+				<div class="form-group">
+					<label for="addressEmail" class="col-form-label"><span class="require-field">*</span>이메일:</label>
+					<input type="text" class="form-control" id="addressEmail" required>
+				</div>
+				<div class="form-group">
+					<label for="addressClass" class="col-form-label">직책:</label>
+					<input type="text" class="form-control" id="addressClass">
+				</div>
+				<div class="form-group">
+					<label for="addressPost" class="col-form-label">기타 주소:</label>
+					<input type="text" class="form-control" id="addressPost">
+				</div>
+				<div class="form-group">
+					<label for="addressGroup" class="col-form-label"><span class="require-field">*</span>그룹:</label>
+					<input type="text" class="form-control" id="addressGroup" required>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+				<button id="addAddress" type="button" class="btn btn-primary">주소록 추가</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$(function () {
+	$('#addAddress').click(function () {
+		$.ajax({
+			url: 'add',
+			method: 'post',
+			data: {
+				addressUserName: $('#addressName').val(),
+				email: $('#addressEmail').val(),
+				className: $('#addressClass').val(),
+				post: $('#addressPost').val(),
+				groupName: $('#addressGroup').val()
+			},
+			success: function (result) {
+				if (result == "success") {
+					location.reload();
+				}
+			},
+			error: function (error) {
+				console.error(error);
+			}
+		})
+	})
+})
+</script>
+</body>
+</html>

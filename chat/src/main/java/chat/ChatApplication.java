@@ -6,10 +6,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @SpringBootApplication(scanBasePackages = "chat,api")
-public class UprismApiSampleApplication {
+public class ChatApplication extends ServletInitializer {
 
 	public static void main(String[] args) {
-		SpringApplication.run(UprismApiSampleApplication.class, args);
+		SpringApplication.run(ChatApplication.class, args);
 	}
 
 	@Controller
@@ -17,7 +17,7 @@ public class UprismApiSampleApplication {
 		
 		@GetMapping("/")
 		public String main() {
-			return "redirect:/chat/roomsEnter";
+			return "redirect:/roomsEnter";
 		}
 	}
 

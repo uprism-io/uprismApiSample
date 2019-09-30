@@ -49,4 +49,5 @@
 		    <version>0.32</version>
 		</dependency>
 	</dependencies>
+	<packaging>war</packaging>
 </project>
