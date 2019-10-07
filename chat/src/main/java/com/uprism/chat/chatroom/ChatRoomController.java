@@ -1,4 +1,4 @@
-package chat.chatroom;
+package com.uprism.chat.chatroom;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import chat.chatroom.model.ChatRoom;
-import chat.chatroom.repository.ChatRoomRepository;
+import com.uprism.chat.chatroom.model.ChatRoom;
+import com.uprism.chat.chatroom.repository.ChatRoomRepository;
 
 @Controller
 @RequestMapping("/")

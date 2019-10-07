@@ -1,4 +1,4 @@
-package address.controller;
+package com.uprism.address.controller;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import api.ApiSender;
-import api.auth.ApiAuthorization;
+import com.uprism.api.ApiSender;
+import com.uprism.api.auth.ApiAuthorization;
+
 
 @Controller
 public class AddressController {
@@ -22,7 +23,12 @@ public class AddressController {
 	@Autowired ApiSender apiSender;
 	
 	@GetMapping("/")
-	public String home(Model model) {
+	public String root(Model model) {
+		return "/address/home";
+	}
+	
+	@GetMapping("/list")
+	public String list(Model model) {
 		JSONObject accessToken = auth.getAccessToken();
 		JSONObject result = apiSender.sendGet("GET", "v1/users/uprism.good1768/address", (String) accessToken.get("access_token"));
 		model.addAttribute("result", result);

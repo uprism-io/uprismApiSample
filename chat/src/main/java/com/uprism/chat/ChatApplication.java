@@ -1,11 +1,11 @@
-package chat;
+package com.uprism.chat;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@SpringBootApplication(scanBasePackages = "chat,api")
+@SpringBootApplication(scanBasePackages = "com.uprism.api,com.uprism.chat")
 public class ChatApplication extends ServletInitializer {
 
 	public static void main(String[] args) {

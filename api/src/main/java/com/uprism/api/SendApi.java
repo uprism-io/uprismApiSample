@@ -1,4 +1,4 @@
-package api;
+package com.uprism.api;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

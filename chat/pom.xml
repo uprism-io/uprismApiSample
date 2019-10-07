@@ -6,13 +6,12 @@
 		<artifactId>api_sample</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>chat</groupId>
+	<groupId>com.uprism.chat</groupId>
 	<artifactId>chat</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>com.uprism</groupId>
+			<groupId>com.uprism.api</groupId>
 			<artifactId>api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.webjars.bower/jquery -->

@@ -1,9 +1,9 @@
-package chat.chatroom.model;
+package com.uprism.chat.chatroom.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uprism.chat.chatroom.stomp.utils.MessageSendUtils;
 
-import chat.chatroom.stomp.utils.MessageSendUtils;
 import lombok.Getter;
 import lombok.NonNull;
 import org.springframework.web.socket.TextMessage;

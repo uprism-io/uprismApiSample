@@ -1,4 +1,4 @@
-package api.auth;
+package com.uprism.api.auth;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import api.ApiSender;
+import com.uprism.api.ApiSender;
 
 @Component
 public class ApiAuthorization {

@@ -1,9 +1,9 @@
-package chat.chatroom.repository;
+package com.uprism.chat.chatroom.repository;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.web.socket.WebSocketSession;
 
-import chat.chatroom.model.ChatRoom;
+import com.uprism.chat.chatroom.model.ChatRoom;
 
 @Repository
 public class ChatRoomRepository {

@@ -6,16 +6,16 @@
 		<artifactId>api_sample</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+	
+	<groupId>com.uprism.address</groupId>
 	<artifactId>address</artifactId>
 	<name>address api</name>
 	<description>uprismApi for address</description>
-	<version>0.0.1-address</version>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.uprism</groupId>
+			<groupId>com.uprism.api</groupId>
 			<artifactId>api</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	
 		<!-- https://mvnrepository.com/artifact/org.webjars.bower/jquery -->

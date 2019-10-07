@@ -1,4 +1,4 @@
-package chat.chatroom.model;
+package com.uprism.chat.chatroom.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package chat.chatroom.stomp;
+package com.uprism.chat.chatroom.stomp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,8 +10,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
-import api.SendApi;
-import chat.chatroom.model.ChatMessage;
+import com.uprism.api.SendApi;
+import com.uprism.chat.chatroom.model.ChatMessage;
 
 @RestController
 public class ChatMessageController {

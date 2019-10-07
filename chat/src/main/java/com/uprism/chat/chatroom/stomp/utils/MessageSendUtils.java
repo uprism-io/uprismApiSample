@@ -1,4 +1,4 @@
-package chat.chatroom.stomp.utils;
+package com.uprism.chat.chatroom.stomp.utils;
 
 import java.io.IOException;
 
