@@ -36,7 +36,6 @@ public class ChatMessageController {
     	Map<String, Object> params = new HashMap<>();
     	params.put("user_id", message.getWriter());
     	params.put("user_name", message.getWriter());
-    	params.put("email", "test");
     	JSONObject user = sendApi.makeUser(params);
         message.setMessage(user.toString());
         template.convertAndSend("/subscribe/user/join/" + message.getChatRoomId() + "/user/" + message.getWriter(), message);
